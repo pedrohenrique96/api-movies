@@ -3,5 +3,5 @@
 node_modules/
 build/
 tmp/
-coverage/
+coverage
 temp/
