@@ -24,19 +24,15 @@ export class ListMoviesService {
         actors,
     }: Request): Promise<Movies[]> {
         if (actors) {
-            const actor = await this.moviesRepository.getFindQueryBuilder(
+            const results = await this.moviesRepository.getFindQueryBuilder(
                 actors,
             );
-            return actor;
+            return results;
         }
 
         const results = await this.moviesRepository.find({
-            where: {
-                name,
-                diretor,
-                gender,
-            },
             order: { id: 'DESC' },
+            relations: ['votes'],
         });
 
         return results;

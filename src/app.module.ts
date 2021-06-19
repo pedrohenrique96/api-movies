@@ -15,17 +15,25 @@ import { MoviesController } from './controllers/movies/movies.controller';
 import { CreateMoviesService } from './services/create-movies/create-movies.service';
 import { ListMoviesService } from './services/list-movies/list-movies.service';
 import { MoviesRepository } from './Repositories/MoviesRepository';
+import { VotesRepository } from './Repositories/VotesRepository';
+import { VoteService } from './services/vote/vote.service';
+import { VotesController } from './controllers/votes/votes.controller';
 
 @Module({
     imports: [
         TypeOrmModule.forRoot(ormconfig),
-        TypeOrmModule.forFeature([UserRepository, MoviesRepository]),
+        TypeOrmModule.forFeature([
+            UserRepository,
+            MoviesRepository,
+            VotesRepository,
+        ]),
     ],
     controllers: [
         UsersController,
         SessionsController,
         CreateAdminController,
         MoviesController,
+        VotesController,
     ],
     providers: [
         CreateUsersService,
@@ -34,12 +42,13 @@ import { MoviesRepository } from './Repositories/MoviesRepository';
         UpdateUserService,
         CreateMoviesService,
         ListMoviesService,
+        VoteService,
     ],
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(EnsureAuthenticatedMiddleware)
-            .forRoutes('admin', 'movies');
+            .forRoutes('admin', 'movies', 'votes');
     }
 }

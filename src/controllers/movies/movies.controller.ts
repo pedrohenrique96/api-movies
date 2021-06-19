@@ -39,14 +39,15 @@ export class MoviesController {
 
     @Post()
     async store(@Req() req: Request, @Res() res: Response): Promise<Response> {
-        const { actors, name, diretor, gender } = req.body;
+        const { actors, description, director, title, genre } = req.body;
         const user_id = req.user_id;
 
         const movie = await this.createMoviesService.execute({
             actors,
-            name,
-            diretor,
-            gender,
+            description,
+            director,
+            title,
+            genre,
             user_id,
         });
 

@@ -1,15 +1,6 @@
 version: '3.1'
 
 services:
-    # API # #
-    api:
-        container_name: api
-        build: .
-        ports:
-            - 3000:3000
-        volumes: 
-            - .:/usr/src/app    
-
     # Databases # #
     db:
         image: postgres
@@ -20,3 +11,14 @@ services:
             POSTGRES_DB: ioasys
         ports:
             - 5432:5432
+            
+    # API # #
+    api:
+        container_name: api
+        build: .
+        ports:
+            - 3000:3000
+        volumes: 
+            - .:/usr/src/app    
+
+    

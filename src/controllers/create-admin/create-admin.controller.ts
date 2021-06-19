@@ -33,6 +33,7 @@ export class CreateAdminController {
                 desativated: false,
             },
         });
+
         return res.status(HttpStatus.OK).json(users);
     }
 

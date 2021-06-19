@@ -7,9 +7,10 @@ import { MoviesRepository } from '../../Repositories/MoviesRepository';
 import { UserRepository } from '../../Repositories/UserRepository';
 
 interface Request {
-    name: string;
-    diretor: string;
-    gender: string;
+    title: string;
+    director: string;
+    description: string;
+    genre: string;
     actors: [];
     user_id: number;
 }
@@ -23,23 +24,46 @@ export class CreateMoviesService {
         private usersRepository: UserRepository,
     ) {}
 
-    async execute({ name, diretor, gender, actors, user_id }: Request) {
+    async execute({
+        title,
+        director,
+        description,
+        genre,
+        actors,
+        user_id,
+    }: Request) {
+        console.log({
+            title,
+            director,
+            description,
+            genre,
+            actors,
+            user_id,
+        });
         const schema = yup.object().shape({
-            name: yup.string().required(),
-            diretor: yup.string().required(),
-            gender: yup.string().required(),
+            title: yup.string().required(),
+            director: yup.string().required(),
+            genre: yup.string().required(),
+            description: yup.string().required(),
             actors: yup.array().required(),
             user_id: yup.number().required(),
         });
 
         if (
-            !(await schema.isValid({ name, diretor, gender, actors, user_id }))
+            !(await schema.isValid({
+                title,
+                director,
+                genre,
+                description,
+                actors,
+                user_id,
+            }))
         ) {
             throw new HttpException('Validation fails', 400);
         }
 
         const checkMovieExists = await this.moviesRepository.findOne({
-            where: { name },
+            where: { title },
         });
 
         if (checkMovieExists) {
@@ -57,9 +81,10 @@ export class CreateMoviesService {
 
         const movie = this.moviesRepository.create({
             actors,
-            gender,
-            diretor,
-            name,
+            director,
+            genre,
+            description,
+            title,
         });
         await this.moviesRepository.save(movie);
 

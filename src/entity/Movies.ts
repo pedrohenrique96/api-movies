@@ -4,21 +4,31 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
+    OneToMany,
+    JoinColumn,
 } from 'typeorm';
+import { Votes } from './Votes';
 
 @Entity()
 export class Movies {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    name: string;
+    @Column({ length: 50 })
+    title: string;
+
+    @Column({ length: 250 })
+    description: string;
+
+    @Column({ length: 50 })
+    director: string;
 
     @Column()
-    diretor: string;
+    genre: string;
 
-    @Column()
-    gender: string;
+    @OneToMany(() => Votes, (v) => v.movie)
+    @JoinColumn({ name: 'movieId' })
+    votes: Votes[];
 
     @Column('text', { array: true })
     actors: string[];

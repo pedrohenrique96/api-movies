@@ -24,9 +24,10 @@ export class CreateAdminService {
             email: yup.string().required(),
             fullname: yup.string().required(),
             password: yup.string().required(),
+            user_id: yup.number().required(),
         });
 
-        if (!(await schema.isValid({ password, email, fullname }))) {
+        if (!(await schema.isValid({ password, email, fullname, user_id }))) {
             throw new HttpException('Validation fails', 400);
         }
 
@@ -34,8 +35,13 @@ export class CreateAdminService {
             where: { id: user_id, desativated: false },
         });
 
-        if (!checkUserIsAdmin.admin || !checkUserIsAdmin) {
-            throw new HttpException('err', 401);
+        if (!checkUserIsAdmin) {
+            throw new HttpException('Admin not exists', 400);
+        } else if (!checkUserIsAdmin.admin) {
+            throw new HttpException(
+                'Cannot add admin because you not admin',
+                401,
+            );
         }
 
         const checkUserExists = await this.usersRepository.findOne({
