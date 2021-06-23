@@ -27,9 +27,9 @@ export class VoteService {
 
     async execute({ movie_id, user_id, vote }: Request) {
         const schema = yup.object().shape({
-            vote: yup.number().required(),
-            user_id: yup.number().required(),
-            movie_id: yup.number().required(),
+            vote: yup.number().required().positive().max(4).min(0),
+            user_id: yup.number().required().positive(),
+            movie_id: yup.number().required().positive(),
         });
 
         if (
@@ -48,7 +48,7 @@ export class VoteService {
         if (!user) {
             throw new HttpException('user not exists', 400);
         } else if (user.admin) {
-            throw new HttpException('user admin, dont vote in movies', 401);
+            throw new HttpException('user admin, cannot vote in movies', 401);
         }
 
         if (!movie) {

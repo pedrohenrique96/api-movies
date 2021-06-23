@@ -1,18 +1,68 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import * as request from 'supertest';
+
+import { Movies } from '../../entity/Movies';
+import { CreateMoviesService } from '../../services/create-movies/create-movies.service';
+import { ListMoviesService } from '../../services/list-movies/list-movies.service';
 import { MoviesController } from './movies.controller';
 
+interface IResponse {
+    movies: Movies;
+    total: number;
+}
+
 describe('MoviesController', () => {
-  let controller: MoviesController;
+    let app: INestApplication;
+    const createMoviesService = {
+        execute: () => new Movies(),
+    };
+    const listMoviesService = {
+        execute: () => {
+            return {} as IResponse;
+        },
+    };
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [MoviesController],
-    }).compile();
+    beforeAll(async () => {
+        const moduleRef = await Test.createTestingModule({
+            imports: [],
+            controllers: [MoviesController],
+            providers: [CreateMoviesService, ListMoviesService],
+        })
+            .overrideProvider(CreateMoviesService)
+            .useValue(createMoviesService)
+            .overrideProvider(ListMoviesService)
+            .useValue(listMoviesService)
+            .compile();
 
-    controller = module.get<MoviesController>(MoviesController);
-  });
+        app = moduleRef.createNestApplication();
+        await app.init();
+    });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+    it(`/Get movies`, async () => {
+        return request(app.getHttpServer())
+            .get('/movies')
+            .then((resp) => {
+                expect(resp.status).toBe(200);
+            });
+    });
+
+    it(`/Post movies`, async () => {
+        return request(app.getHttpServer())
+            .post('/movies')
+            .send({
+                actors: ['Froudo'],
+                description: 'Qualquer',
+                director: '1',
+                title: 'Hobbit',
+                genre: 'Aventura',
+            })
+            .then((resp) => {
+                expect(resp.status).toBe(200);
+            });
+    });
+
+    afterAll(async () => {
+        await app.close();
+    });
 });

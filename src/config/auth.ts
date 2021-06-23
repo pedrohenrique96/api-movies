@@ -1,4 +1,4 @@
 export default {
-  secret: 'asdasahdsjdhasndmasnd',
-  expiresIn: '1d',
+    secret: 'asdasahdsjdhasndmasnd',
+    expiresIn: '1d',
 };

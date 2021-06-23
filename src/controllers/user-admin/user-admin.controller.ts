@@ -7,46 +7,27 @@ import {
     Res,
     Put,
     Param,
+    Patch,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Request, Response } from 'express';
-import { User } from '../../entity/User';
-import { UserRepository } from '../../Repositories/UserRepository';
 import { CreateAdminService } from '../../services/create-admin/create-admin.service';
+import { DeleteAdminService } from '../../services/delete-admin/delete-admin.service';
+import { ListAdminService } from '../../services/list-admin/list-admin.service';
 import { UpdateUserService } from '../../services/update-user/update-user.service';
 
 @Controller('admin')
-export class CreateAdminController {
+export class UserAdminController {
     constructor(
         private createAdminService: CreateAdminService,
         private updateUserService: UpdateUserService,
-
-        @InjectRepository(User)
-        private usersRepository: UserRepository,
+        private listAdminService: ListAdminService,
+        private deleteAdminService: DeleteAdminService,
     ) {}
 
     @Get()
     async getAll(@Req() req: Request, @Res() res: Response) {
-        const users = await this.usersRepository.find({
-            where: {
-                admin: true,
-                desativated: false,
-            },
-        });
-
-        return res.status(HttpStatus.OK).json(users);
-    }
-
-    @Get(':id')
-    async getById(
-        @Param(':id') id: number,
-        @Req() req: Request,
-        @Res() res: Response,
-    ) {
-        const user = await this.usersRepository.findOne({
-            where: { id, admin: true, desativated: false },
-        });
-        return res.status(HttpStatus.OK).json(user);
+        const admins = await this.listAdminService.execute();
+        return res.status(HttpStatus.OK).json(admins);
     }
 
     @Post()
@@ -81,5 +62,16 @@ export class CreateAdminController {
         });
 
         return res.status(HttpStatus.OK).json(user);
+    }
+
+    @Patch(':id')
+    async delete(
+        @Param('id') id: number,
+        @Req() req: Request,
+        @Res() res: Response,
+    ) {
+        await this.deleteAdminService.execute(id);
+
+        return res.status(HttpStatus.OK).json();
     }
 }

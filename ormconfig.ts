@@ -9,7 +9,7 @@ const config: ConnectionOptions = {
     port: 5432,
     username: 'postgres',
     password: 'docker',
-    database: 'ioasys',
+    database: 'movies',
     entities: [User, Movies, Votes],
     migrations: ['src/database/migration/*{.ts,.js}'],
     cli: {

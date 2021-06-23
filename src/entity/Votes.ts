@@ -14,7 +14,7 @@ export class Votes {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'float' })
+    @Column({ type: 'decimal' })
     vote: number;
 
     @ManyToOne(() => User)

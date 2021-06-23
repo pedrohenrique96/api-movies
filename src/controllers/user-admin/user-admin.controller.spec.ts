@@ -1,56 +1,56 @@
+import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import { INestApplication } from '@nestjs/common';
-import { UsersController } from './users.controller';
-import { CreateUsersService } from '../../services/create-users/create-users.service';
 import { User } from '../../entity/User';
+import { CreateAdminService } from '../../services/create-admin/create-admin.service';
+import { DeleteAdminService } from '../../services/delete-admin/delete-admin.service';
+import { ListAdminService } from '../../services/list-admin/list-admin.service';
 import { UpdateUserService } from '../../services/update-user/update-user.service';
-import { ListUsersService } from '../../services/list-users/list-users.service';
-import { DeleteUserService } from '../../services/delete-user/delete-user.service';
+import { UserAdminController } from './user-admin.controller';
 
-describe('UsersController', () => {
+describe('UserAdminController', () => {
     let app: INestApplication;
-    const createUsersService = { execute: () => new User() };
-    const updateUserService = { execute: () => new User() };
-    const listUsersService = { execute: () => [new User()] };
-    const deleteUserService = { execute: () => {} };
+    const createAdminService = { execute: () => new User() };
+    const updateUserService = { execute: () => Promise };
+    const listAdminService = { execute: () => [new User()] };
+    const deleteAdminService = { execute: () => {} };
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [],
-            controllers: [UsersController],
+            controllers: [UserAdminController],
             providers: [
-                CreateUsersService,
+                CreateAdminService,
                 UpdateUserService,
-                ListUsersService,
-                DeleteUserService,
+                ListAdminService,
+                DeleteAdminService,
             ],
         })
-            .overrideProvider(CreateUsersService)
-            .useValue(createUsersService)
+            .overrideProvider(CreateAdminService)
+            .useValue(createAdminService)
             .overrideProvider(UpdateUserService)
             .useValue(updateUserService)
-            .overrideProvider(ListUsersService)
-            .useValue(listUsersService)
-            .overrideProvider(DeleteUserService)
-            .useValue(deleteUserService)
+            .overrideProvider(ListAdminService)
+            .useValue(listAdminService)
+            .overrideProvider(DeleteAdminService)
+            .useValue(deleteAdminService)
             .compile();
 
         app = moduleRef.createNestApplication();
         await app.init();
     });
 
-    it(`/Get users`, async () => {
+    it(`/Get admin`, async () => {
         return request(app.getHttpServer())
-            .get('/users')
+            .get('/admin')
             .then((resp) => {
                 expect(resp.status).toBe(200);
             });
     });
 
-    it(`/Post users`, async () => {
+    it(`/Post admin`, async () => {
         return request(app.getHttpServer())
-            .post('/users')
+            .post('/admin')
             .send({
                 fullname: 'Pedro',
                 email: 'pedrook16@gmail.com',
@@ -61,9 +61,9 @@ describe('UsersController', () => {
             });
     });
 
-    it(`/Put user`, async () => {
+    it(`/Put admin`, async () => {
         return request(app.getHttpServer())
-            .put('/users/9')
+            .put('/admin/9')
             .send({
                 fullname: 'Pedro',
                 email: 'pedrook16@gmail.com',
@@ -75,9 +75,9 @@ describe('UsersController', () => {
             });
     });
 
-    it(`/Patch user`, async () => {
+    it(`/Patch admin`, async () => {
         return request(app.getHttpServer())
-            .patch('/users/1')
+            .patch('/admin/1')
             .then((resp) => {
                 expect(resp.status).toBe(200);
             });

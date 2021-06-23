@@ -5,11 +5,16 @@ import { User } from '../../entity/User';
 import { CreateSessionService } from '../../services/create-session/create-session.service';
 import { SessionsController } from './sessions.controller';
 
+interface ResponseSession {
+    user: User;
+    token: string;
+}
+
 describe('SessionsController', () => {
     let app: INestApplication;
     const createSessionService = {
         execute: () => {
-            new User(), '';
+            return {} as ResponseSession;
         },
     };
 

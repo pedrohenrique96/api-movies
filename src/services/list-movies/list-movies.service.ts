@@ -8,6 +8,7 @@ interface Request {
     diretor?: string;
     gender?: string;
     actors?: string;
+    pagination: { take?: number; page?: number };
 }
 
 @Injectable()
@@ -17,12 +18,11 @@ export class ListMoviesService {
         private moviesRepository: MoviesRepository,
     ) {}
 
-    async execute({
-        name,
-        diretor,
-        gender,
-        actors,
-    }: Request): Promise<Movies[]> {
+    async execute({ name, diretor, gender, actors, pagination }: Request) {
+        const take = pagination.take || 10;
+        const page = pagination.page || 1;
+        const skip = (page + 1) * take;
+
         if (actors) {
             const results = await this.moviesRepository.getFindQueryBuilder(
                 actors,
@@ -30,11 +30,13 @@ export class ListMoviesService {
             return results;
         }
 
-        const results = await this.moviesRepository.find({
+        const [movies, total] = await this.moviesRepository.findAndCount({
             order: { id: 'DESC' },
             relations: ['votes'],
+            take,
+            skip,
         });
 
-        return results;
+        return { movies, total };
     }
 }

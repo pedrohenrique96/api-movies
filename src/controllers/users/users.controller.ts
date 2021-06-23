@@ -9,11 +9,10 @@ import {
     Req,
     Res,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Request, Response } from 'express';
-import { User } from '../../entity/User';
-import { UserRepository } from '../../Repositories/UserRepository';
 import { CreateUsersService } from '../../services/create-users/create-users.service';
+import { DeleteUserService } from '../../services/delete-user/delete-user.service';
+import { ListUsersService } from '../../services/list-users/list-users.service';
 import { UpdateUserService } from '../../services/update-user/update-user.service';
 
 @Controller('users')
@@ -21,18 +20,13 @@ export class UsersController {
     constructor(
         private createUserService: CreateUsersService,
         private updateUserService: UpdateUserService,
-        @InjectRepository(User)
-        private usersRepository: UserRepository,
+        private listUsersService: ListUsersService,
+        private deleteUserService: DeleteUserService,
     ) {}
 
     @Get()
     async getAll(@Req() req: Request, @Res() res: Response) {
-        const users = await this.usersRepository.find({
-            where: {
-                admin: false,
-                desativated: false,
-            },
-        });
+        const users = await this.listUsersService.execute();
         return res.status(HttpStatus.OK).json(users);
     }
 
@@ -74,7 +68,7 @@ export class UsersController {
         @Req() req: Request,
         @Res() res: Response,
     ) {
-        await this.usersRepository.update(id, { desativated: true });
+        await this.deleteUserService.execute(id);
 
         return res.status(HttpStatus.OK).json();
     }
