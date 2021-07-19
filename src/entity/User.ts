@@ -26,7 +26,7 @@ export class User {
     password: string;
 
     @Column({ default: false })
-    desativated: boolean;
+    deactivated: boolean;
 
     @CreateDateColumn()
     created_at: Date;

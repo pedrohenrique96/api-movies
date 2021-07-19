@@ -32,14 +32,6 @@ export class CreateMoviesService {
         actors,
         user_id,
     }: Request) {
-        console.log({
-            title,
-            director,
-            description,
-            genre,
-            actors,
-            user_id,
-        });
         const schema = yup.object().shape({
             title: yup.string().required(),
             director: yup.string().required(),

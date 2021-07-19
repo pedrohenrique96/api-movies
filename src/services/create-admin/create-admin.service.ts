@@ -45,7 +45,7 @@ export class CreateAdminService {
         }
 
         const checkUserExists = await this.usersRepository.findOne({
-            where: { email, desativated: false },
+            where: { email, deactivated: false },
         });
 
         if (checkUserExists) {

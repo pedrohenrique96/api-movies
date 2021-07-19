@@ -25,7 +25,7 @@ export class CreateSessionService {
 
     async execute({ email, password }: Request): Promise<Response> {
         const user = await this.usersRepository.findOne({
-            where: { email, desativated: false },
+            where: { email, deactivated: false },
         });
 
         if (!user) {

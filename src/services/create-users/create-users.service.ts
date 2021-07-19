@@ -30,7 +30,7 @@ export class CreateUsersService {
         }
 
         const checkUserExists = await this.usersRepository.findOne({
-            where: { email, desativated: false },
+            where: { email, deactivated: false },
         });
 
         if (checkUserExists) {

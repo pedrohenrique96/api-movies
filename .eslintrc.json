@@ -1,50 +1,59 @@
 {
     "env": {
-      "node": true
+        "node": true
     },
     "extends": [
-      "airbnb-base",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:prettier/recommended"
+        "airbnb-base",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-      "ecmaVersion": 12,
-      "sourceType": "module"
+        "ecmaVersion": 12,
+        "sourceType": "module"
     },
     "root": true,
     "plugins": ["@typescript-eslint", "prettier"],
     "rules": {
-      "@typescript-eslint/interface-name-prefix": "off",
-      "@typescript-eslint/explicit-function-return-type": "off",
-      "@typescript-eslint/explicit-module-boundary-types": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "prettier/prettier": "error",
-      "no-useless-constructor": "off",
-      "no-unused-vars": "off",
-      "camelcase": "off",
-      "import/no-unresolved": "off",
-      "prefer-default-export": "off",
-      "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-      "no-param-reassign": "off",
-      "prefer-destructuring": "off",
-      "class-methods-use-this": "off",
-      "import/extensions": "off",
-      "consistent-return": "off",
-      "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/**/*.spec.ts", "test/*.e2e-spec.ts", "**/**/*.mock.ts"]}],
-      "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/no-unused-vars": ["error", {"args": "none"}],
-      "import/prefer-default-export": "off",
-      "no-empty-function": "off"
+        "@typescript-eslint/interface-name-prefix": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "prettier/prettier": "error",
+        "no-useless-constructor": "off",
+        "no-unused-vars": "off",
+        "camelcase": "off",
+        "import/no-unresolved": "off",
+        "prefer-default-export": "off",
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+        "no-param-reassign": "off",
+        "prefer-destructuring": "off",
+        "class-methods-use-this": "off",
+        "import/extensions": "off",
+        "consistent-return": "off",
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": [
+                    "**/**/*.spec.ts",
+                    "test/*.e2e-spec.ts",
+                    "**/**/*.mock.ts"
+                ]
+            }
+        ],
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-unused-vars": ["error", { "args": "none" }],
+        "import/prefer-default-export": "off",
+        "no-empty-function": "off",
+        "@typescript-eslint/no-empty-function": ["error"],
+        "no-unneeded-ternary": ["error", { "defaultAssignment": false }]
     },
     "settings": {
-      "import/resolver":{
-        "node": {
-          "extensions": ["spec.ts", ".ts", ".tsx"],
-          "moduleDirectory": ["node_modules", "src/"]
+        "import/resolver": {
+            "node": {
+                "extensions": ["spec.ts", ".ts", ".tsx"],
+                "moduleDirectory": ["node_modules", "src/"]
+            }
         }
-      }
     }
-   
-  }
-  
+}

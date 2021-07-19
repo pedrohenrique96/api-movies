@@ -34,7 +34,7 @@ export class UpdateUserService {
         }
 
         const user = await this.usersRepository.findOne({
-            where: { id, desativated: false },
+            where: { id, deactivated: false },
         });
 
         if (!user) {
@@ -43,7 +43,7 @@ export class UpdateUserService {
 
         if (user.email !== email) {
             const checkUserExists = await this.usersRepository.findOne({
-                where: { email, desativated: false },
+                where: { email, deactivated: false },
             });
 
             if (checkUserExists) {
@@ -54,7 +54,7 @@ export class UpdateUserService {
         const passwordMatched = await compare(lastPassword, user.password);
 
         if (!passwordMatched) {
-            throw new HttpException("You last password isen't corrent", 401);
+            throw new HttpException('You last password wrong', 400);
         }
 
         const password_hash = await hash(password, 10);

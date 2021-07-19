@@ -14,7 +14,7 @@ export class ListUsersService {
         const results = await this.usersRepository.find({
             where: {
                 admin: false,
-                desativated: false,
+                deactivated: false,
             },
         });
 

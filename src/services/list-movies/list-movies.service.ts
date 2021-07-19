@@ -3,12 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Movies } from '../../entity/Movies';
 import { MoviesRepository } from '../../Repositories/MoviesRepository';
 
-interface Request {
-    name?: string;
-    diretor?: string;
+export interface IfiltersMovies {
+    title?: string;
+    director?: string;
     gender?: string;
     actors?: string;
-    pagination: { take?: number; page?: number };
+    limit?: number;
+    page?: number;
 }
 
 @Injectable()
@@ -18,25 +19,23 @@ export class ListMoviesService {
         private moviesRepository: MoviesRepository,
     ) {}
 
-    async execute({ name, diretor, gender, actors, pagination }: Request) {
-        const take = pagination.take || 10;
-        const page = pagination.page || 1;
-        const skip = (page + 1) * take;
-
-        if (actors) {
-            const results = await this.moviesRepository.getFindQueryBuilder(
-                actors,
-            );
-            return results;
-        }
-
-        const [movies, total] = await this.moviesRepository.findAndCount({
-            order: { id: 'DESC' },
-            relations: ['votes'],
-            take,
-            skip,
+    async execute({
+        title,
+        director,
+        gender,
+        actors,
+        limit = 10,
+        page = 1,
+    }: IfiltersMovies) {
+        const movies = await this.moviesRepository.findAllWithFilters({
+            title,
+            director,
+            gender,
+            actors,
+            limit,
+            page,
         });
 
-        return { movies, total };
+        return movies;
     }
 }

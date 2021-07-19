@@ -20,20 +20,22 @@ export class MoviesController {
 
     @Get()
     async getAll(
-        @Query('name') name: string,
-        @Query('diretor') diretor: string,
+        @Query('title') title: string,
+        @Query('director') director: string,
         @Query('gender') gender: string,
         @Query('actors') actors: string,
-        @Query('pagination') pagination: { take: number; page: number },
+        @Query('limit') limit: number,
+        @Query('page') page: number,
         @Req() req: Request,
         @Res() res: Response,
     ) {
         const results = await this.listMoviesService.execute({
             actors,
             gender,
-            diretor,
-            name,
-            pagination,
+            director,
+            title,
+            limit,
+            page,
         });
 
         return res.status(HttpStatus.OK).json(results);

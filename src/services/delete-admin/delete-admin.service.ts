@@ -11,6 +11,6 @@ export class DeleteAdminService {
     ) {}
 
     async execute(id: number) {
-        await this.usersRepository.update(id, { desativated: true });
+        await this.usersRepository.update(id, { deactivated: true });
     }
 }

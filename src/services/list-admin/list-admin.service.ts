@@ -15,7 +15,7 @@ export class ListAdminService {
             order: { id: 'DESC' },
             where: {
                 admin: true,
-                desativated: false,
+                deactivated: false,
             },
         });
 
